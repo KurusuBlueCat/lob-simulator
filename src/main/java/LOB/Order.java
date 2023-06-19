@@ -42,9 +42,9 @@ public class Order {
     @Override
     public String toString() {
         // Printer
-        return side + " " + timestamp
-               + "id: " + id
-            //    + "price: " + price
-               + "amount: " + amount;
+        return this.getClass().getSimpleName() + " " + side 
+               + " id: " + id
+               + " amount: " + amount
+               + " " + timestamp;
     }
 }
