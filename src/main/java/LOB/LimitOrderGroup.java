@@ -92,17 +92,25 @@ public class LimitOrderGroup implements HasPrice {
         return marketOrder;
     }
 
-    public Level getLevel(){
+    public int countOrder(){
+        return ordersDeque.size();
+    }
+
+    public double aggregateOrderAmount(){
         double total_amount=0;
         for (Order o : ordersDeque){
             total_amount+=o.amount;
         }
-        return new Level(price, total_amount, ordersDeque.size(), side);
+
+        return total_amount;
     }
 
     @Override
     public String toString() {
-        return this.getLevel().toString();
+        return String.format("%s [%10s, %10s, %5s]", this.side, 
+                                                     this.price, 
+                                                     this.aggregateOrderAmount(), 
+                                                     this.countOrder());
     }
 }
 

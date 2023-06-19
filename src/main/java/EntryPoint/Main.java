@@ -28,6 +28,13 @@ public class Main {
         System.out.println(priceGroup);
         System.out.println(marketOrder);
 
+        MarketOrder bigMarketOrder = new MarketOrder(105, OrderEnum.Side.ASK, 0);
+        System.out.println("Purchased with " + bigMarketOrder);
+        priceGroup.takeOrder(bigMarketOrder);
+
+        System.out.println(priceGroup);
+        System.out.println(bigMarketOrder);
+
         // for (Order o: priceGroup.ordersDeque){
         //     System.out.println(o);
         // }

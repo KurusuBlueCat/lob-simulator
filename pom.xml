@@ -33,14 +33,22 @@
                 <archive>
                 <manifest>
                     <addClasspath>true</addClasspath>
-                    <classpathPrefix>lib/</classpathPrefix>
-                    <mainClass>src.main.java.EntryPoint.Main</mainClass> <!-- Set the main class of your application -->
+                    <classpathPrefix>src/main/java</classpathPrefix>
+                    <mainClass>EntryPoint.Main</mainClass> <!-- Set the main class of your application -->
                 </manifest>
                 </archive>
-                <suiteXmlFiles>
-                    <suiteXmlFile>testng.xml</suiteXmlFile>
-                </suiteXmlFiles>
             </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>

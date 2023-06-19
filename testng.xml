@@ -2,7 +2,7 @@
 <suite name="Test Suite">
     <test name="Test">
         <classes>
-            <class name="src.main.java.LOB.CalculatorTest"/>
+            <class name="LOB.LimitOrderGroupTests"/>
         </classes>
     </test>
 </suite>
