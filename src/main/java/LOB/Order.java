@@ -6,18 +6,16 @@ import java.util.Comparator;
 public class Order {
     int id;
     public double amount;
-    double price;
-    OrderEnum.Type type;
+    // double price;
     OrderEnum.Side side;
     long timestamp;
 
     public static Comparator<Order> TimeComparator = Comparator.comparingLong(Order::getTimestamp);
-    public static Comparator<Order> PriceComparator = Comparator.comparingDouble(Order::getPrice);
+    // public static Comparator<Order> PriceComparator = Comparator.comparingDouble(Order::getPrice);
 
-    public Order(double price, double amount, OrderEnum.Side side, OrderEnum.Type type, int id) {
-        this.price = price;
+    public Order(double amount, OrderEnum.Side side, int id) {
+        // this.price = price;
         this.amount = amount;
-        this.type = type;
         this.side = side;
         this.id = id;
 
@@ -37,16 +35,16 @@ public class Order {
         return timestamp;
     }
 
-    public double getPrice() {
-        return price;
-    }
+    // public double getPrice() {
+    //     return price;
+    // }
 
     @Override
     public String toString() {
         // Printer
-        return type + "-" + side + " " + timestamp
+        return side + " " + timestamp
                + "id: " + id
-               + "price: " + price
+            //    + "price: " + price
                + "amount: " + amount;
     }
 }

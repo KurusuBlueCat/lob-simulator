@@ -18,12 +18,12 @@ public class LimitOrderGroup {
 
     final double price;
     final OrderEnum.Side side;
-    public Deque<Order> ordersDeque;
+    public Deque<LimitOrder> ordersDeque;
     
     public LimitOrderGroup(double price, OrderEnum.Side side){
         this.price = price;
         this.side = side;
-        this.ordersDeque = new ArrayDeque<Order>();
+        this.ordersDeque = new ArrayDeque<LimitOrder>();
     }
 
     /**
@@ -32,10 +32,7 @@ public class LimitOrderGroup {
      * that its price are 'close enough' to the price level of this group.
      * @param order Order object to add
      */
-    public void addOrder(Order order){
-        assert order.type == OrderEnum.Type.LIMIT 
-            : "The order must be of type " + OrderEnum.Type.LIMIT;
-
+    public void addOrder(LimitOrder order){
         assert order.side == this.side
             : "The order must be of type " + this.side;
 
@@ -54,7 +51,7 @@ public class LimitOrderGroup {
      * Add order without checking ANYTHING
      * @param order Order object to add
      */
-    void dangerousAdd(Order order){
+    void dangerousAdd(LimitOrder order){
         ordersDeque.add(order);
     }
 
@@ -64,15 +61,10 @@ public class LimitOrderGroup {
      * incoming order. Must be of type MARKET and is on the opposing
      * side of this LimitOrderGroup
      */
-    public Order takeOrder(Order marketOrder){
-        assert marketOrder.type == OrderEnum.Type.MARKET
-            : "Incoming order must be market order!";
+    public MarketOrder takeOrder(MarketOrder marketOrder){
         assert marketOrder.side != side
             : "Incoming order must be of opposing side! This group is " 
               + side + " but the incoming order is " + marketOrder.side;
-
-        //price is not checked. Market order could be executed at limit order of
-        //differing prices
 
         while ((marketOrder.amount > 0) && (this.ordersDeque.size() > 0)){
             marketOrder.amount -= ordersDeque.peek().amount;

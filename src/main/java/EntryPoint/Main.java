@@ -1,6 +1,7 @@
 package src.main.java.EntryPoint;
 
-import src.main.java.LOB.Order;
+import src.main.java.LOB.LimitOrder;
+import src.main.java.LOB.MarketOrder;
 import src.main.java.LOB.OrderEnum;
 import src.main.java.LOB.LimitOrderGroup;
 
@@ -14,12 +15,12 @@ public class Main {
         LimitOrderGroup priceGroup = new LimitOrderGroup(120.0, OrderEnum.Side.BID);
 
         for (int i = 0; i < 10; ++i){
-            priceGroup.addOrder(new Order(120, 10., OrderEnum.Side.BID , OrderEnum.Type.LIMIT, 12));
+            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID, 12));
         }
 
         System.out.println(priceGroup);
 
-        Order marketOrder = new Order(121, 25, OrderEnum.Side.ASK, OrderEnum.Type.MARKET, 0);
+        MarketOrder marketOrder = new MarketOrder(25, OrderEnum.Side.ASK, 0);
 
         System.out.println("Purchased with " + marketOrder);
         priceGroup.takeOrder(marketOrder);
