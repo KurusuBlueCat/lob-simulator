@@ -2,7 +2,7 @@ package LOB;
 
 import LOB.Interfaces.HasPrice;
 
-public class LimitOrder extends Order implements HasPrice {
+public class LimitOrder extends Order implements HasPrice, Comparable<HasPrice> {
     double price;
 
     public LimitOrder(double price, double amount, OrderEnum.Side side){
@@ -18,5 +18,10 @@ public class LimitOrder extends Order implements HasPrice {
     @Override
     public double getPrice() {
         return price;
+    }
+
+    @Override
+    public int compareTo(HasPrice other) {
+        return HasPrice.PriceComparator.compare(this, other);
     }
 }

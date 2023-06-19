@@ -10,7 +10,7 @@ public class Interfaces { //Namespace
  * It does not enforce implementation of price setter, however.
  */
 public static interface HasPrice {
-    double getPrice();
+    public double getPrice();
     public static Comparator<HasPrice> PriceComparator = Comparator.comparingDouble(HasPrice::getPrice);
 }
 
@@ -20,7 +20,7 @@ public static interface HasPrice {
  * It does not enforce implementation of id setter, however.
  */
 public static interface HasID {
-    long getID();
+    public long getID();
     public static Comparator<HasID> PriceComparator = Comparator.comparingLong(HasID::getID);
 }
 

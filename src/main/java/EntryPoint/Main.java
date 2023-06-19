@@ -1,9 +1,10 @@
+
 package EntryPoint;
 
 import LOB.LimitOrder;
-import LOB.MarketOrder;
+// import LOB.MarketOrder;
 import LOB.OrderEnum;
-import LOB.LimitOrderGroup;
+import LOB.LimitOrderBook;
 
 record Tester(int lmao, double lol) {
 
@@ -12,34 +13,13 @@ record Tester(int lmao, double lol) {
 public class Main {
     public static void main(String[] args){
 
-        LimitOrderGroup priceGroup = new LimitOrderGroup(120.0, OrderEnum.Side.BID);
+        LimitOrderBook LOB = new LimitOrderBook();
 
         for (int i = 0; i < 10; ++i){
-            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID));
+            LOB.receiveLimitOrder(new LimitOrder(i*10, 10., OrderEnum.Side.BID));
+            System.out.println(LOB);
         }
 
-        System.out.println(priceGroup);
-
-        MarketOrder marketOrder = new MarketOrder(25, OrderEnum.Side.ASK);
-
-        System.out.println("Purchased with " + marketOrder);
-        priceGroup.takeOrder(marketOrder);
-        
-        System.out.println(priceGroup);
-        System.out.println(marketOrder);
-
-        MarketOrder bigMarketOrder = new MarketOrder(105, OrderEnum.Side.ASK);
-        System.out.println("Purchased with " + bigMarketOrder);
-        priceGroup.takeOrder(bigMarketOrder);
-
-        System.out.println(priceGroup);
-        System.out.println(bigMarketOrder);
-
-        // for (Order o: priceGroup.ordersDeque){
-        //     System.out.println(o);
-        // }
-        // Order o = new Order(12.4, 10., OrderEnum.Side.BID , OrderEnum.Type.LIMIT, 12);
-        
     }
 }
 

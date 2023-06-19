@@ -15,7 +15,7 @@ public class Order implements HasID {
     public static Comparator<Order> TimeComparator = Comparator.comparingLong(Order::getTimestamp);
     // public static Comparator<Order> PriceComparator = Comparator.comparingDouble(Order::getPrice);
 
-    private Boolean _idLocked = false;
+    private boolean _idLocked = false;
 
     public Order(double amount, OrderEnum.Side side) {
         // this.price = price;
@@ -38,6 +38,14 @@ public class Order implements HasID {
         return timestamp;
     }
 
+    /**
+     * permanently stamp an ID to this Order
+     * 
+     * @param id : long integer to be used as ID
+     * 
+     * @throw IllegalStateException : 
+     * Will be raised if ID was already set
+     */
     public void setID(long id) {
         if (_idLocked) {
             throw new IllegalStateException("Id cannot be changed once it is set.");

@@ -10,13 +10,7 @@ import java.util.ArrayDeque;
  * Also requires limit order only, and that the OrderSide must also match.
  */
 
-public class LimitOrderGroup implements HasPrice {
-    /**
-     * Tolerance for price difference so floating point data won't cause
-     * problems
-     */
-    final static double EPSILON = 0.000001;
-
+public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
     final double price;
     final OrderEnum.Side side;
     public Deque<LimitOrder> ordersDeque;
@@ -32,6 +26,11 @@ public class LimitOrderGroup implements HasPrice {
         return this.price;
     }
 
+    @Override
+    public int compareTo(HasPrice other) {
+        return HasPrice.PriceComparator.compare(this, other);
+    }
+
     /**
      * Add Order object to the end of the Deque<Order>, after checking
      * for correctness of its orderType and orderSide. Will also enforce
@@ -42,7 +41,7 @@ public class LimitOrderGroup implements HasPrice {
         assert order.side == this.side
             : "The order must be of type " + this.side;
 
-        assert Math.abs(order.price - this.price) < EPSILON 
+        assert Math.abs(order.price - this.price) < Constants.EPSILON 
             : "Price level mismatch with this group. This group is " + this.price
               + " but the given Order is priced at: " + order.price;
 
@@ -105,12 +104,18 @@ public class LimitOrderGroup implements HasPrice {
         return total_amount;
     }
 
+    private static String _toFormat = "%s [%10s, %10s, %5s]";
+
     @Override
     public String toString() {
-        return String.format("%s [%10s, %10s, %5s]", this.side, 
-                                                     this.price, 
-                                                     this.aggregateOrderAmount(), 
-                                                     this.countOrder());
+        return String.format(_toFormat, this.side, 
+                                        this.price, 
+                                        this.aggregateOrderAmount(), 
+                                        this.countOrder());
+    }
+
+    public static String toStringNull(LimitOrderGroup og){
+        return og != null ? og.toString() : String.format(_toFormat, "NaN", 0, 0, 0);
     }
 }
 
