@@ -3,6 +3,7 @@
     <test name="Test">
         <classes>
             <class name="LOB.LimitOrderGroupTests"/>
+            <class name="LOB.MarketOrderMatchingTests"/>
         </classes>
     </test>
 </suite>
