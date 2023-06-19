@@ -1,6 +1,9 @@
 package src.main.java.LOB;
 
 import java.util.Deque;
+
+import src.main.java.LOB.Interfaces.HasPrice;
+
 import java.util.ArrayDeque;
 
 
@@ -9,7 +12,7 @@ import java.util.ArrayDeque;
  * Also requires limit order only, and that the OrderSide must also match.
  */
 
-public class LimitOrderGroup {
+public class LimitOrderGroup implements HasPrice {
     /**
      * Tolerance for price difference so floating point data won't cause
      * problems
@@ -24,6 +27,11 @@ public class LimitOrderGroup {
         this.price = price;
         this.side = side;
         this.ordersDeque = new ArrayDeque<LimitOrder>();
+    }
+
+    @Override
+    public double getPrice(){
+        return this.price;
     }
 
     /**
