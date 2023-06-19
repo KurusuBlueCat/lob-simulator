@@ -3,8 +3,10 @@ package LOB;
 import java.time.Instant;
 import java.util.Comparator;
 
-public class Order {
-    int id;
+import LOB.Interfaces.HasID;
+
+public class Order implements HasID {
+    public long id;
     public double amount;
     // double price;
     OrderEnum.Side side;
@@ -13,11 +15,12 @@ public class Order {
     public static Comparator<Order> TimeComparator = Comparator.comparingLong(Order::getTimestamp);
     // public static Comparator<Order> PriceComparator = Comparator.comparingDouble(Order::getPrice);
 
-    public Order(double amount, OrderEnum.Side side, int id) {
+    private Boolean _idLocked = false;
+
+    public Order(double amount, OrderEnum.Side side) {
         // this.price = price;
         this.amount = amount;
         this.side = side;
-        this.id = id;
 
         setTimestamp();
     }
@@ -35,9 +38,18 @@ public class Order {
         return timestamp;
     }
 
-    // public double getPrice() {
-    //     return price;
-    // }
+    public void setID(long id) {
+        if (_idLocked) {
+            throw new IllegalStateException("Id cannot be changed once it is set.");
+        } else {
+            this.id = id;
+        }
+    }
+
+    @Override
+    public long getID(){
+        return this.id;
+    }
 
     @Override
     public String toString() {

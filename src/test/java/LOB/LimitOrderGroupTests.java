@@ -10,7 +10,7 @@ public class LimitOrderGroupTests {
         LimitOrderGroup priceGroup = new LimitOrderGroup(120.0, OrderEnum.Side.BID);
 
         for (int i = 0; i < 10; ++i){
-            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID, 12));
+            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID));
         }
 
         Assert.assertEquals(priceGroup.getPrice(), 120.0);

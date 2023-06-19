@@ -8,7 +8,7 @@ public class MarketOrderMatchingTests {
         LimitOrderGroup priceGroup = new LimitOrderGroup(120.0, OrderEnum.Side.BID);
 
         for (int i = 0; i < 10; ++i){
-            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID, 12));
+            priceGroup.addOrder(new LimitOrder(120, 10., OrderEnum.Side.BID));
         }
 
         return priceGroup;
@@ -18,7 +18,7 @@ public class MarketOrderMatchingTests {
     public void testTakeOrder() {
         LimitOrderGroup priceGroup = getTenBidOrderGroup();
 
-        MarketOrder marketOrder = new MarketOrder(25, OrderEnum.Side.ASK, 0);
+        MarketOrder marketOrder = new MarketOrder(25, OrderEnum.Side.ASK);
 
         priceGroup.takeOrder(marketOrder);
         
@@ -33,7 +33,7 @@ public class MarketOrderMatchingTests {
     public void testTakeBigOrder() {
         LimitOrderGroup priceGroup = getTenBidOrderGroup();
 
-        MarketOrder marketOrder = new MarketOrder(105, OrderEnum.Side.ASK, 0);
+        MarketOrder marketOrder = new MarketOrder(105, OrderEnum.Side.ASK);
 
         priceGroup.takeOrder(marketOrder);
         
