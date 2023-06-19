@@ -1,4 +1,4 @@
-package src.main.java.LOB;
+package LOB;
 
 public class OrderEnum { //Namespace
 

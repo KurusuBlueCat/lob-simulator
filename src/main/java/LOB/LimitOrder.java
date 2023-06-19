@@ -1,6 +1,6 @@
-package src.main.java.LOB;
+package LOB;
 
-import src.main.java.LOB.Interfaces.HasPrice;
+import LOB.Interfaces.HasPrice;
 
 public class LimitOrder extends Order implements HasPrice {
     double price;

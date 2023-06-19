@@ -1,4 +1,4 @@
-package src.main.java.EntryPoint;
+package EntryPoint;
 
 public class MainDebug {
     public static void main(String[] args){

@@ -1,4 +1,4 @@
-package src.main.java.LOB;
+package LOB;
 
 /**
  * This is a record for LOB price level

@@ -1,4 +1,4 @@
-package src.main.java.LOB;
+package LOB;
 
 public class MarketOrder extends Order{
     public MarketOrder(double amount, OrderEnum.Side side, int id) {

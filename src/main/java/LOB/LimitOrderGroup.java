@@ -1,11 +1,9 @@
-package src.main.java.LOB;
+package LOB;
+
+import LOB.Interfaces.HasPrice;
 
 import java.util.Deque;
-
-import src.main.java.LOB.Interfaces.HasPrice;
-
 import java.util.ArrayDeque;
-
 
 /**
  * Stores Order of the same prices together. Assertion will enforce this.

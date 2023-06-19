@@ -11,6 +11,17 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+    
+    <dependencies>
+        <!-- TestNG -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.4.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>lob-simulator</finalName>
         <plugins>
@@ -26,8 +37,12 @@
                     <mainClass>src.main.java.EntryPoint.Main</mainClass> <!-- Set the main class of your application -->
                 </manifest>
                 </archive>
+                <suiteXmlFiles>
+                    <suiteXmlFile>testng.xml</suiteXmlFile>
+                </suiteXmlFiles>
             </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

@@ -1,9 +1,9 @@
-package src.main.java.EntryPoint;
+package EntryPoint;
 
-import src.main.java.LOB.LimitOrder;
-import src.main.java.LOB.MarketOrder;
-import src.main.java.LOB.OrderEnum;
-import src.main.java.LOB.LimitOrderGroup;
+import LOB.LimitOrder;
+import LOB.MarketOrder;
+import LOB.OrderEnum;
+import LOB.LimitOrderGroup;
 
 record Tester(int lmao, double lol) {
 
@@ -26,6 +26,7 @@ public class Main {
         priceGroup.takeOrder(marketOrder);
         
         System.out.println(priceGroup);
+        System.out.println(marketOrder);
 
         // for (Order o: priceGroup.ordersDeque){
         //     System.out.println(o);

@@ -1,4 +1,4 @@
-package src.main.java.LOB;
+package LOB;
 
 import java.time.Instant;
 import java.util.Comparator;
