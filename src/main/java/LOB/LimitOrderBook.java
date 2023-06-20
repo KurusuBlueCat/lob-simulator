@@ -107,6 +107,9 @@ public class LimitOrderBook {
         for (LimitOrderGroup lOGroup : limitOrders){
             startingAmount = order.amount;
             order = lOGroup.takeOrder(order);
+            for (long idToRemove : lOGroup.getRemoved()){
+                idPriceMap.remove(idToRemove);
+            }
             if (lOGroup.aggregateOrderAmount() == 0){
                 toRemove.add(lOGroup);
             }
@@ -123,6 +126,18 @@ public class LimitOrderBook {
         }
 
         return totalValue/totalAmount; // return averaged purchased price.
+    }
+
+    public void cancelOrder(long id){
+        LimitOrderGroup priceLevel = new LimitOrderGroup(idPriceMap.get(id), null);
+        boolean isAsk = priceLevel.price >= getBestBid();
+        LimitOrderGroup group = isAsk ? asks.ceiling(priceLevel)
+                                      : bids.floor(priceLevel);
+
+        group.cancelOrder(id);
+        if (group.countOrder() == 0) {
+            if (isAsk) asks.remove(group); else bids.remove(group);
+        }
     }
 
     @Override
@@ -144,6 +159,10 @@ public class LimitOrderBook {
         } 
 
         return String.join("\n", toJoin);
+    }
+
+    public String showIDMap() {
+        return idPriceMap.toString();
     }
 
 }

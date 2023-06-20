@@ -3,7 +3,9 @@ package LOB;
 import LOB.Interfaces.HasPrice;
 
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 /**
  * Stores Order of the same prices together. Assertion will enforce this.
@@ -14,11 +16,14 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
     final double price;
     final OrderEnum.Side side;
     public Deque<LimitOrder> ordersDeque;
+
+    private ArrayList<Long> _removed;
     
     public LimitOrderGroup(double price, OrderEnum.Side side){
         this.price = price;
         this.side = side;
         this.ordersDeque = new ArrayDeque<LimitOrder>();
+        this._removed = new ArrayList<Long>();
     }
 
     @Override
@@ -79,7 +84,8 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
                 // we can set it to negative of amount, as that is the remainder
                 ordersDeque.peek().amount = -marketOrder.amount;
             } else {
-                ordersDeque.pop();
+                Order order = ordersDeque.pop();
+                _removed.add(order.getID());
             }
         }
 
@@ -89,6 +95,21 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         //return 0 if amount is exhausted. 
         //return amount if this group is exhausted.
         return marketOrder;
+    }
+
+    public void cancelOrder(long id){
+        Iterator<LimitOrder> iter = ordersDeque.iterator();
+        LimitOrder tempOrder;
+
+        while (true){
+            tempOrder = iter.next();
+            if (tempOrder == null){
+                break;
+            } else if (tempOrder.id == id){
+                ordersDeque.remove(tempOrder);
+                break;
+            }
+        }
     }
 
     public int countOrder(){
@@ -116,6 +137,12 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
 
     public static String toStringNull(LimitOrderGroup og){
         return og != null ? og.toString() : String.format(_toFormat, "None", 0, 0, 0);
+    }
+
+    public ArrayList<Long> getRemoved(){
+        ArrayList<Long> toReturn = new ArrayList<Long>(_removed);
+        _removed.clear();
+        return toReturn;
     }
 }
 

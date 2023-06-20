@@ -51,7 +51,6 @@ public class MarketOrderMatchingTests {
 
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.BID));
-            System.out.println(LOB);
         }
 
         MarketOrder marketOrder = new MarketOrder(30, OrderEnum.Side.ASK);
@@ -70,7 +69,6 @@ public class MarketOrderMatchingTests {
 
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.ASK));
-            System.out.println(LOB);
         }
 
         MarketOrder marketOrder = new MarketOrder(30, OrderEnum.Side.BID);
@@ -90,7 +88,6 @@ public class MarketOrderMatchingTests {
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.BID));
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.BID));
-            System.out.println(LOB);
         }
 
         MarketOrder marketOrder = new MarketOrder(30, OrderEnum.Side.ASK);
@@ -111,7 +108,6 @@ public class MarketOrderMatchingTests {
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.ASK));
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.ASK));
-            System.out.println(LOB);
         }
 
         MarketOrder marketOrder = new MarketOrder(30, OrderEnum.Side.BID);

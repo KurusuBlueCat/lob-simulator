@@ -82,5 +82,67 @@ public class LimitOrderBookTests {
         Assert.assertEquals(LOB.getAsks().first().countOrder(), 10);
         Assert.assertEquals(LOB.getBids().size(), 0);
     }
+
+    @Test
+    public void cancelBidNotEmpty(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 70.0, 60.0, 90.0, 80.0};
+
+        for (double price : randomOrder){
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.BID));
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.BID));
+        }
+
+        LOB.cancelOrder(2);
+        Assert.assertEquals(LOB.getBids().floor(new LimitOrderGroup(70, null)).countOrder(), 1);
+        Assert.assertEquals(LOB.getBids().size(), 5);
+    }
     
+    @Test
+    public void cancelAskNotEmpty(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 70.0, 60.0, 90.0, 80.0};
+
+        for (double price : randomOrder){
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.ASK));
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.ASK));
+        }
+
+        LOB.cancelOrder(2);
+        Assert.assertEquals(LOB.getAsks().floor(new LimitOrderGroup(70, null)).countOrder(), 1);
+        Assert.assertEquals(LOB.getAsks().size(), 5);
+    }
+
+    @Test
+    public void cancelAskEmpty(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 70.0, 60.0, 90.0, 80.0};
+
+        for (double price : randomOrder){
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.ASK));
+        }
+
+        LOB.cancelOrder(2);
+        Assert.assertEquals(LOB.getAsks().floor(new LimitOrderGroup(60, null)).getPrice(), 50);
+        Assert.assertEquals(LOB.getAsks().size(), 4);
+    }
+
+    @Test
+    public void cancelBidEmpty(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 70.0, 60.0, 90.0, 80.0};
+
+        for (double price : randomOrder){
+            LOB.receiveLimitOrder(new LimitOrder(price, 20., OrderEnum.Side.BID));
+        }
+
+        LOB.cancelOrder(2);
+        // floor is 70 because bid order are reversed from highest to lowest
+        Assert.assertEquals(LOB.getBids().floor(new LimitOrderGroup(60, null)).getPrice(), 70);
+        Assert.assertEquals(LOB.getBids().size(), 4);
+    }
 }
