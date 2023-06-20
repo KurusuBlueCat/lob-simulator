@@ -101,11 +101,9 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         Iterator<LimitOrder> iter = ordersDeque.iterator();
         LimitOrder tempOrder;
 
-        while (true){
+        while (iter.hasNext()){
             tempOrder = iter.next();
-            if (tempOrder == null){
-                break;
-            } else if (tempOrder.id == id){
+            if (tempOrder.id == id){
                 ordersDeque.remove(tempOrder);
                 break;
             }
@@ -125,7 +123,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         return total_amount;
     }
 
-    private static String _toFormat = "%4s [%10s, %10s, %5s]";
+    private static String _toFormat = "%4s [%7.3f, %7.3f, %5s]";
 
     @Override
     public String toString() {
@@ -136,7 +134,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
     }
 
     public static String toStringNull(LimitOrderGroup og){
-        return og != null ? og.toString() : String.format(_toFormat, "None", 0, 0, 0);
+        return og != null ? og.toString() : String.format(_toFormat, "None", 0., 0., 0);
     }
 
     public ArrayList<Long> getRemoved(){

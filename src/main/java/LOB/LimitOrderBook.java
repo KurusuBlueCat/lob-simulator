@@ -12,6 +12,9 @@ public class LimitOrderBook {
     TreeSet<LimitOrderGroup> asks;
     TreeSet<LimitOrderGroup> bids;
     HashMap<Long, Double> idPriceMap;
+
+    private int _maxPrint=10;
+
     // double minimumIncrement;
     // double minimumAmount;
 
@@ -140,6 +143,10 @@ public class LimitOrderBook {
         }
     }
 
+    public void set_maxPrint(int maxPrint){
+        this._maxPrint = maxPrint;
+    }
+
     @Override
     public String toString() {
         Iterator<LimitOrderGroup> aIter = asks.iterator();
@@ -151,12 +158,16 @@ public class LimitOrderBook {
 
         toJoin.add("Limit Order Book");
 
-        while ((a != null) || (b != null)) {
+        for (int i=0; i<_maxPrint; ++i)  {
             toJoin.add(LimitOrderGroup.toStringNull(b) + " " + LimitOrderGroup.toStringNull(a));
 
             a = aIter.hasNext() ? aIter.next(): null;
             b = bIter.hasNext() ? bIter.next(): null;
-        } 
+
+            if (!((a != null) || (b != null))){
+                break;
+            }
+        }
 
         return String.join("\n", toJoin);
     }
