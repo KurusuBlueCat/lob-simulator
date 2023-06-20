@@ -104,7 +104,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         return total_amount;
     }
 
-    private static String _toFormat = "%s [%10s, %10s, %5s]";
+    private static String _toFormat = "%4s [%10s, %10s, %5s]";
 
     @Override
     public String toString() {
@@ -115,7 +115,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
     }
 
     public static String toStringNull(LimitOrderGroup og){
-        return og != null ? og.toString() : String.format(_toFormat, "NaN", 0, 0, 0);
+        return og != null ? og.toString() : String.format(_toFormat, "None", 0, 0, 0);
     }
 }
 

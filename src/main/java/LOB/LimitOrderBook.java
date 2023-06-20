@@ -16,21 +16,41 @@ public class LimitOrderBook {
     // double minimumAmount;
 
     private IDMaker _idm;
+    private double _latestBestBid;
+    private double _latestBestAsk;
 
     public LimitOrderBook(){
         asks = new TreeSet<LimitOrderGroup>();
         bids = new TreeSet<LimitOrderGroup>(LimitOrderGroup.PriceComparator.reversed());
         idPriceMap = new HashMap<Long, Double>();
+        _latestBestBid = Double.MIN_VALUE;
+        _latestBestAsk = Double.MAX_VALUE;
         
         _idm = new IDMaker();
     }
 
     public double getBestBid(){
-        return bids.first().getPrice(); //bid is reversed order, so first is also best bid
+        return _latestBestBid;
+    }
+
+    private void updateBestBid(){
+        _latestBestBid = Double.max(_latestBestBid, bids.first().getPrice());
     }
 
     public double getBestAsk(){
-        return asks.first().getPrice();
+        return _latestBestAsk;
+    }
+
+    private void updateBestAsk(){
+        _latestBestAsk = Double.min(_latestBestAsk, asks.first().getPrice());
+    }
+
+    public TreeSet<LimitOrderGroup> getBids(){
+        return bids;
+    }
+
+    public TreeSet<LimitOrderGroup> getAsks(){
+        return asks;
     }
 
     public long receiveLimitOrder(LimitOrder order){
@@ -55,8 +75,16 @@ public class LimitOrderBook {
         orderGroup.addOrder(order);
         idPriceMap.put(newID, order.price);
 
+        if (isAsk){
+            updateBestAsk();
+        } else {
+            updateBestBid();
+        }
+
         return newID;
     }
+
+    // public receiveMarketOrder()
 
     @Override
     public String toString() {
