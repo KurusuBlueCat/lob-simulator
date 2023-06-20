@@ -84,7 +84,46 @@ public class LimitOrderBook {
         return newID;
     }
 
-    // public receiveMarketOrder()
+    /**
+     * No support for unfilled market order yet.
+     * 
+     * This function assumes that market order will be fully filled.
+     * 
+     * @param order A MarketOrder to be matched with existing LimitOrder
+     * 
+     * @return VWAP averaged purchasing price.
+     */
+    public double receiveMarketOrder(MarketOrder order){
+        boolean isAsk = order.side == Side.ASK;
+        TreeSet<LimitOrderGroup> limitOrders = isAsk ? bids : asks; //take oppposite limit order
+
+        double totalValue = 0;
+        double totalAmount = order.amount;
+        double startingAmount;
+        double amountTraded;
+
+        ArrayList<LimitOrderGroup> toRemove = new ArrayList<LimitOrderGroup>();
+
+        for (LimitOrderGroup lOGroup : limitOrders){
+            startingAmount = order.amount;
+            order = lOGroup.takeOrder(order);
+            if (lOGroup.aggregateOrderAmount() == 0){
+                toRemove.add(lOGroup);
+            }
+            amountTraded = startingAmount - order.amount;
+
+            totalValue += amountTraded * lOGroup.price;
+            if (order.amount == 0){
+                break;
+            }
+        }
+
+        for (LimitOrderGroup r : toRemove){
+            limitOrders.remove(r);
+        }
+
+        return totalValue/totalAmount; // return averaged purchased price.
+    }
 
     @Override
     public String toString() {
