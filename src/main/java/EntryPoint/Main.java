@@ -1,9 +1,6 @@
 
 package EntryPoint;
 
-import java.sql.Time;
-import java.util.Random;
-
 import LOB.LimitOrder;
 import LOB.OrderEnum;
 import LOB.LimitOrderBook;
@@ -12,6 +9,7 @@ import Agents.Agent;
 // import LOB.LimitOrderGroup;
 // import LOB.MarketOrder;
 import Agents.LimitOrderAgent;
+import Agents.MarketOrderAgent;
 
 record Tester(int lmao, double lol) {
 
@@ -28,15 +26,28 @@ public class Main {
 
         System.out.println(LOB);
 
-        Agent a = new LimitOrderAgent(LOB);
+        Agent[] agentArr = {
+            new LimitOrderAgent(LOB, 0.1, 0.5, 50., 10., 0.03, 0),
+            new LimitOrderAgent(LOB, 0.1, 0.5, 30., 15., 0.03, 3),
+            new LimitOrderAgent(LOB, 0.1, 0.5, 10., 6., 0.03, 9),
+            new MarketOrderAgent(LOB, 0.5, 3, 4),
+            new MarketOrderAgent(LOB, 0.5, 4, 5),
+        };
 
-        for (int i=0; i<50; ++i){
-            a.act();
-            System.out.println(LOB);
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        for (int i=0; i<150; ++i){
+            agentArr[0].act();
+        }
+
+        // for (int i=0; i<150; ++i){
+        for (;;){
+            for (Agent a: agentArr) {
+                a.act();
+                System.out.println(LOB);
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
 

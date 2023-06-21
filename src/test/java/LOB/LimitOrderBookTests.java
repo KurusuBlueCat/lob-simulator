@@ -14,7 +14,6 @@ public class LimitOrderBookTests {
 
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.BID));
-            System.out.println(LOB);
         }
 
         Assert.assertEquals(LOB.getBids().size(), 5);
@@ -38,7 +37,6 @@ public class LimitOrderBookTests {
 
         for (double price : randomOrder){
             LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.ASK));
-            System.out.println(LOB);
         }
 
         Assert.assertEquals(LOB.getAsks().size(), 5);
@@ -59,7 +57,6 @@ public class LimitOrderBookTests {
 
         for (int i=0; i<10; ++i){
             LOB.receiveLimitOrder(new LimitOrder(100., 10., OrderEnum.Side.BID));
-            System.out.println(LOB);
         }
 
         Assert.assertEquals(LOB.getBids().size(), 1);
@@ -74,7 +71,6 @@ public class LimitOrderBookTests {
 
         for (int i=0; i<10; ++i){
             LOB.receiveLimitOrder(new LimitOrder(100., 10., OrderEnum.Side.ASK));
-            System.out.println(LOB);
         }
 
         Assert.assertEquals(LOB.getAsks().size(), 1);

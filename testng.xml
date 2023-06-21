@@ -4,6 +4,8 @@
         <classes>
             <class name="LOB.LimitOrderGroupTests"/>
             <class name="LOB.MarketOrderMatchingTests"/>
+            <class name="LOB.LimitOrderBookTests"/>
+            <class name="Agents.LimitOrderAgentTests"/>
         </classes>
     </test>
 </suite>

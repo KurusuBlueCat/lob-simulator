@@ -97,7 +97,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         return marketOrder;
     }
 
-    public void cancelOrder(long id){
+    public boolean cancelOrder(long id){
         Iterator<LimitOrder> iter = ordersDeque.iterator();
         LimitOrder tempOrder;
 
@@ -105,9 +105,11 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
             tempOrder = iter.next();
             if (tempOrder.id == id){
                 ordersDeque.remove(tempOrder);
-                break;
+                return true;
             }
         }
+
+        return false;
     }
 
     public int countOrder(){
@@ -123,7 +125,7 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         return total_amount;
     }
 
-    private static String _toFormat = "%4s [%7.3f, %7.3f, %5s]";
+    private static String _toFormat = "%4s [%10.3f, %10.3f, %5s]";
 
     @Override
     public String toString() {

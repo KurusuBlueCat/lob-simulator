@@ -131,16 +131,22 @@ public class LimitOrderBook {
         return totalValue/totalAmount; // return averaged purchased price.
     }
 
-    public void cancelOrder(long id){
+    public boolean cancelOrder(long id){
+        if (!idPriceMap.containsKey(id)) return false;
+
         LimitOrderGroup priceLevel = new LimitOrderGroup(idPriceMap.get(id), null);
         boolean isAsk = priceLevel.price >= getBestBid();
         LimitOrderGroup group = isAsk ? asks.ceiling(priceLevel)
                                       : bids.floor(priceLevel);
 
-        group.cancelOrder(id);
+        if (group == null) return false;
+
+        boolean result = group.cancelOrder(id);
         if (group.countOrder() == 0) {
             if (isAsk) asks.remove(group); else bids.remove(group);
         }
+
+        return result;
     }
 
     public void set_maxPrint(int maxPrint){

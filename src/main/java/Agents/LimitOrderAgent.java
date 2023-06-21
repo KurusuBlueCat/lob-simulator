@@ -2,11 +2,11 @@ package Agents;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.Iterator;
 
 import LOB.LimitOrder;
 import LOB.LimitOrderBook;
-import LOB.OrderEnum.Side;;
+import LOB.OrderEnum.Side;
+
 
 public class LimitOrderAgent extends Agent {
     public double priceIncrement;
@@ -17,11 +17,11 @@ public class LimitOrderAgent extends Agent {
     private double _cancelRate;
     private Random _rng;
 
-    public LimitOrderAgent(LimitOrderBook LOB, double priceIncrement, float sideBias, 
+    public LimitOrderAgent(LimitOrderBook LOB, double priceIncrement, double sideBias, 
                            double lambda, double amount, double cancelRate, long seed){
         super(LOB);
         this.priceIncrement = priceIncrement;
-        this._sideBias = sideBias;
+        this._sideBias = (float)sideBias;
         this._lambda = lambda;
         this._amount = amount;
         this._cancelRate = cancelRate;
@@ -50,11 +50,9 @@ public class LimitOrderAgent extends Agent {
 
         idSet.add(LOB.receiveLimitOrder(new LimitOrder(orderPrice, _amount, side)));
 
-        int noToCancel = (int)(idSet.size() * _cancelRate);
-        Iterator<Long> iter = idSet.iterator();
-
-        for (int i=0; i<noToCancel; ++i){
-            LOB.cancelOrder(iter.next());
+        for (Long toRemove : idSet){
+            if (_rng.nextDouble() < _cancelRate)
+                LOB.cancelOrder(toRemove);
         }
     }
 
