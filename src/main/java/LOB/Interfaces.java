@@ -21,7 +21,7 @@ public static interface HasPrice {
  */
 public static interface HasID {
     public long getID();
-    public static Comparator<HasID> PriceComparator = Comparator.comparingLong(HasID::getID);
+    public static Comparator<HasID> IDComparator = Comparator.comparingLong(HasID::getID);
 }
 
 }

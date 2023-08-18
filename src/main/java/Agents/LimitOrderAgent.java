@@ -18,8 +18,8 @@ public class LimitOrderAgent extends Agent {
     private Random _rng;
 
     public LimitOrderAgent(LimitOrderBook LOB, double priceIncrement, double sideBias, 
-                           double lambda, double amount, double cancelRate, long seed){
-        super(LOB);
+                           double lambda, double amount, double cancelRate, long seed, long id){
+        super(LOB, id);
         this.priceIncrement = priceIncrement;
         this._sideBias = (float)sideBias;
         this._lambda = lambda;
@@ -31,8 +31,8 @@ public class LimitOrderAgent extends Agent {
         _rng.setSeed(seed);
     }
 
-    public LimitOrderAgent(LimitOrderBook LOB){
-        this(LOB, 0.1, (float)0.5, 10.0, 5.0, 0.1, (long)420);
+    public LimitOrderAgent(LimitOrderBook LOB, long id){
+        this(LOB, 0.1, (float)0.5, 10.0, 5.0, 0.1, (long)420, id);
     }
 
     public void act(){

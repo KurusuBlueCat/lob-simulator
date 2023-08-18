@@ -27,11 +27,11 @@ public class Main {
         System.out.println(LOB);
 
         Agent[] agentArr = {
-            new LimitOrderAgent(LOB, 0.1, 0.5, 50., 10., 0.03, 0),
-            new LimitOrderAgent(LOB, 0.1, 0.5, 30., 15., 0.03, 3),
-            new LimitOrderAgent(LOB, 0.1, 0.5, 10., 6., 0.03, 9),
-            new MarketOrderAgent(LOB, 0.5, 3, 4),
-            new MarketOrderAgent(LOB, 0.5, 4, 5),
+            new LimitOrderAgent(LOB, 0.1, 0.5, 50., 10., 0.03, 0, 0),
+            new LimitOrderAgent(LOB, 0.1, 0.5, 30., 15., 0.03, 3, 1),
+            new LimitOrderAgent(LOB, 0.1, 0.5, 10., 6., 0.03, 9, 2),
+            new MarketOrderAgent(LOB, 0.5, 3, 4, 3),
+            new MarketOrderAgent(LOB, 0.5, 4, 5, 4),
         };
 
         for (int i=0; i<150; ++i){

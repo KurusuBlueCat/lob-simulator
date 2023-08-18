@@ -12,8 +12,8 @@ public class MarketOrderAgent extends Agent {
     private Random _rng;
 
     public MarketOrderAgent(LimitOrderBook LOB, double sideBias,
-                            double amount, long seed){
-        super(LOB);
+                            double amount, long seed, long id){
+        super(LOB, id);
         this._sideBias = (float)sideBias;
         this._amount = amount;
 
@@ -21,8 +21,8 @@ public class MarketOrderAgent extends Agent {
         _rng.setSeed(seed);
     }
 
-    public MarketOrderAgent(LimitOrderBook LOB){
-        this(LOB, (float)0.5, 1., 0);
+    public MarketOrderAgent(LimitOrderBook LOB, long id){
+        this(LOB, (float)0.5, 1., 0, id);
     }
 
     public void act(){

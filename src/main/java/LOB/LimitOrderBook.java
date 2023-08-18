@@ -1,6 +1,9 @@
 package LOB;
 
 import java.util.TreeSet;
+
+import Agents.Agent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +14,8 @@ import LOB.Utils.IDMaker;
 public class LimitOrderBook {
     TreeSet<LimitOrderGroup> asks;
     TreeSet<LimitOrderGroup> bids;
-    HashMap<Long, Double> idPriceMap;
+    HashMap<Long, LimitOrder> idOrderMap;
+    HashMap<Long, Agent> idAgentMap;
 
     private int _maxPrint=10;
 
@@ -25,7 +29,8 @@ public class LimitOrderBook {
     public LimitOrderBook(){
         asks = new TreeSet<LimitOrderGroup>();
         bids = new TreeSet<LimitOrderGroup>(LimitOrderGroup.PriceComparator.reversed());
-        idPriceMap = new HashMap<Long, Double>();
+        idOrderMap = new HashMap<Long, LimitOrder>();
+        idAgentMap = new HashMap<Long, Agent>();
         _latestBestBid = Double.MIN_VALUE;
         _latestBestAsk = Double.MAX_VALUE;
         
@@ -76,7 +81,7 @@ public class LimitOrderBook {
         }
 
         orderGroup.addOrder(order);
-        idPriceMap.put(newID, order.price);
+        idOrderMap.put(newID, order);
 
         if (isAsk){
             updateBestAsk();
@@ -111,7 +116,7 @@ public class LimitOrderBook {
             startingAmount = order.amount;
             order = lOGroup.takeOrder(order);
             for (long idToRemove : lOGroup.getRemoved()){
-                idPriceMap.remove(idToRemove);
+                idOrderMap.remove(idToRemove);
             }
             if (lOGroup.aggregateOrderAmount() == 0){
                 toRemove.add(lOGroup);
@@ -132,9 +137,9 @@ public class LimitOrderBook {
     }
 
     public boolean cancelOrder(long id){
-        if (!idPriceMap.containsKey(id)) return false;
+        if (!idOrderMap.containsKey(id)) return false;
 
-        LimitOrderGroup priceLevel = new LimitOrderGroup(idPriceMap.get(id), null);
+        LimitOrderGroup priceLevel = new LimitOrderGroup(idOrderMap.get(id).price, null);
         boolean isAsk = priceLevel.price >= getBestBid();
         LimitOrderGroup group = isAsk ? asks.ceiling(priceLevel)
                                       : bids.floor(priceLevel);
@@ -179,7 +184,7 @@ public class LimitOrderBook {
     }
 
     public String showIDMap() {
-        return idPriceMap.toString();
+        return idOrderMap.toString();
     }
 
 }

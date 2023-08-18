@@ -16,7 +16,7 @@ public class LimitOrderAgentTests {
         LOB.receiveLimitOrder(new LimitOrder(990, 5., OrderEnum.Side.BID));
         LOB.receiveLimitOrder(new LimitOrder(1010, 5., OrderEnum.Side.ASK));
 
-        Agent a = new LimitOrderAgent(LOB);
+        Agent a = new LimitOrderAgent(LOB, 0);
 
         a.act();
 
