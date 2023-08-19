@@ -3,6 +3,8 @@ package LOB;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import LOB.Order.LimitOrder;
+
 public class LimitOrderBookTests {
 
     @Test

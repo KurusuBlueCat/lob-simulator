@@ -1,16 +1,17 @@
-package LOB;
+package LOB.Order;
 
 import java.time.Instant;
 import java.util.Comparator;
 
+import LOB.OrderEnum;
 import LOB.Interfaces.HasID;
 
 public class Order implements HasID {
     public long id;
     public double amount;
     // double price;
-    OrderEnum.Side side;
-    long timestamp;
+    public OrderEnum.Side side;
+    public long timestamp;
 
     public static Comparator<Order> TimeComparator = Comparator.comparingLong(Order::getTimestamp);
     // public static Comparator<Order> PriceComparator = Comparator.comparingDouble(Order::getPrice);

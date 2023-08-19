@@ -3,26 +3,44 @@ package LOB;
 import java.util.TreeSet;
 
 import Agents.Agent;
+import Agents.DummyAgent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import LOB.Order.LimitOrder;
+import LOB.Order.MarketOrder;
+import LOB.OrderEnum.OrderCompletedMsg;
 import LOB.OrderEnum.Side;
 import LOB.Utils.IDMaker;
 
 public class LimitOrderBook {
     TreeSet<LimitOrderGroup> asks;
     TreeSet<LimitOrderGroup> bids;
+
+    /**
+     * id-limitorder mapping
+     */
     HashMap<Long, LimitOrder> idOrderMap;
+
+    /**
+     * id-agent mapping
+     */
     HashMap<Long, Agent> idAgentMap;
+
+    /**
+     * id-id mapping
+     */
+    HashMap<Long, Long> orderAgentMap;
 
     private int _maxPrint=10;
 
     // double minimumIncrement;
     // double minimumAmount;
 
-    private IDMaker _idm;
+    private IDMaker _order_idm;
+    private IDMaker _agent_idm;
     private double _latestBestBid;
     private double _latestBestAsk;
 
@@ -31,10 +49,14 @@ public class LimitOrderBook {
         bids = new TreeSet<LimitOrderGroup>(LimitOrderGroup.PriceComparator.reversed());
         idOrderMap = new HashMap<Long, LimitOrder>();
         idAgentMap = new HashMap<Long, Agent>();
+        orderAgentMap = new HashMap<Long, Long>();
         _latestBestBid = Double.MIN_VALUE;
         _latestBestAsk = Double.MAX_VALUE;
-        
-        _idm = new IDMaker();
+        _order_idm = new IDMaker();
+        _agent_idm = new IDMaker();
+
+        DummyAgent dagent = new DummyAgent(this);
+        registerAgent(-1, dagent); //create dummy agent to -1
     }
 
     public double getBestBid(){
@@ -61,10 +83,24 @@ public class LimitOrderBook {
         return asks;
     }
 
+    protected void registerAgent(long agentID, Agent agent){
+        idAgentMap.put(agentID, agent);
+    }
+
+    public long registerAgent(Agent agent){
+        long newID = _agent_idm.makeID();
+        registerAgent(newID, agent);
+        return newID;
+    }
+
     public long receiveLimitOrder(LimitOrder order){
-        long newID = _idm.makeID();
+        return receiveLimitOrder(order, -1);
+    }
+
+    public long receiveLimitOrder(LimitOrder order, long agentID){
+        long orderID = _order_idm.makeID();
         try{
-            order.setID(newID);
+            order.setID(orderID);
         } catch (IllegalStateException e) {
             return -1; //this indicates that Order was invalid/already stamped with ID
         }
@@ -81,7 +117,8 @@ public class LimitOrderBook {
         }
 
         orderGroup.addOrder(order);
-        idOrderMap.put(newID, order);
+        idOrderMap.put(orderID, order);
+        orderAgentMap.put(orderID, agentID);
 
         if (isAsk){
             updateBestAsk();
@@ -89,37 +126,52 @@ public class LimitOrderBook {
             updateBestBid();
         }
 
-        return newID;
+        return orderID;
+    }
+
+    public double receiveMarketOrder(MarketOrder order){
+        receiveMarketOrder(order, -1);
+        return order.vwap;
     }
 
     /**
-     * No support for unfilled market order yet.
-     * 
-     * This function assumes that market order will be fully filled.
+     * Currently this function immediately fills market order. There are no
+     * implementation for unfilled market order yet.
      * 
      * @param order A MarketOrder to be matched with existing LimitOrder
      * 
-     * @return VWAP averaged purchasing price.
+     * @return order id
      */
-    public double receiveMarketOrder(MarketOrder order){
+    public long receiveMarketOrder(MarketOrder order, long agentID){
+        long newID = _order_idm.makeID();
+        try{
+            order.setID(newID);
+        } catch (IllegalStateException e) {
+            return -1; //this indicates that Order was invalid/already stamped with ID
+        }
+
         boolean isAsk = order.side == Side.ASK;
         TreeSet<LimitOrderGroup> limitOrders = isAsk ? bids : asks; //take oppposite limit order
 
-        double totalValue = 0;
-        double totalAmount = order.amount;
+        double totalValue = 0; //this...
+        double totalAmount = order.amount; //...and this are for VWAP calculation
         double startingAmount;
         double amountTraded;
 
-        ArrayList<LimitOrderGroup> toRemove = new ArrayList<LimitOrderGroup>();
+        ArrayList<LimitOrderGroup> groupToRemove = new ArrayList<LimitOrderGroup>();
 
         for (LimitOrderGroup lOGroup : limitOrders){
             startingAmount = order.amount;
             order = lOGroup.takeOrder(order);
+
             for (long idToRemove : lOGroup.getRemoved()){
                 idOrderMap.remove(idToRemove);
+                long orderOwnerID = orderAgentMap.get(idToRemove);
+                idAgentMap.get(orderOwnerID).completeOrder(idToRemove, OrderCompletedMsg.FILLED);
             }
+
             if (lOGroup.aggregateOrderAmount() == 0){
-                toRemove.add(lOGroup);
+                groupToRemove.add(lOGroup);
             }
             amountTraded = startingAmount - order.amount;
 
@@ -129,11 +181,14 @@ public class LimitOrderBook {
             }
         }
 
-        for (LimitOrderGroup r : toRemove){
+        order.vwap = totalValue/totalAmount;
+
+        for (LimitOrderGroup r : groupToRemove){
             limitOrders.remove(r);
         }
 
-        return totalValue/totalAmount; // return averaged purchased price.
+        return -1; //return -1 because market order would have been filled.
+        //Will have to improve this part
     }
 
     public boolean cancelOrder(long id){

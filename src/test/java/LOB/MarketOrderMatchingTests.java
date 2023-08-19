@@ -3,6 +3,9 @@ package LOB;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import LOB.Order.LimitOrder;
+import LOB.Order.MarketOrder;
+
 public class MarketOrderMatchingTests {
     LimitOrderGroup getTenBidOrderGroup(){
         LimitOrderGroup priceGroup = new LimitOrderGroup(120.0, OrderEnum.Side.BID);

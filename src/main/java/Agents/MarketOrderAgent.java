@@ -3,7 +3,8 @@ package Agents;
 import java.util.Random;
 
 import LOB.LimitOrderBook;
-import LOB.MarketOrder;
+import LOB.Order.MarketOrder;
+import LOB.OrderEnum.OrderCompletedMsg;
 import LOB.OrderEnum.Side;
 
 public class MarketOrderAgent extends Agent {
@@ -13,7 +14,7 @@ public class MarketOrderAgent extends Agent {
 
     public MarketOrderAgent(LimitOrderBook LOB, double sideBias,
                             double amount, long seed, long id){
-        super(LOB, id);
+        super(LOB);
         this._sideBias = (float)sideBias;
         this._amount = amount;
 
@@ -26,10 +27,26 @@ public class MarketOrderAgent extends Agent {
     }
 
     public void act(){
+        MarketOrder newOrder;
         if (_rng.nextFloat() < _sideBias){
-            LOB.receiveMarketOrder(new MarketOrder(_amount, Side.ASK));
+            newOrder = new MarketOrder(_amount, Side.ASK);
         } else {
-            LOB.receiveMarketOrder(new MarketOrder(_amount, Side.BID));
+            newOrder = new MarketOrder(_amount, Side.BID);
+        }
+
+        long orderId = LOB.receiveMarketOrder(newOrder, this.id);
+        this.liveOrders.put(orderId, newOrder);
+    }
+
+    public void completeOrder(long id, OrderCompletedMsg msg){
+        switch (msg) {
+            case FILLED:
+                liveOrders.remove(id);
+                break;
+            case CANCELLED:
+                liveOrders.remove(id);
+                break;
         }
     }
+
 }

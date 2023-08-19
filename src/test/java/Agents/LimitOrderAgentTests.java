@@ -3,9 +3,9 @@ package Agents;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import LOB.LimitOrder;
 import LOB.LimitOrderBook;
 import LOB.OrderEnum;
+import LOB.Order.LimitOrder;
 
 public class LimitOrderAgentTests {
     @Test
@@ -16,7 +16,7 @@ public class LimitOrderAgentTests {
         LOB.receiveLimitOrder(new LimitOrder(990, 5., OrderEnum.Side.BID));
         LOB.receiveLimitOrder(new LimitOrder(1010, 5., OrderEnum.Side.ASK));
 
-        Agent a = new LimitOrderAgent(LOB, 0);
+        Agent a = new LimitOrderAgent(LOB);
 
         a.act();
 

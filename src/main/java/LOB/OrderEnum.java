@@ -19,4 +19,21 @@ public static enum Side{
     }
 }
 
+public static enum OrderCompletedMsg {
+    FILLED("Filled"),
+    CANCELLED("Cancelled");
+
+    private final String typename;
+
+    OrderCompletedMsg(String typename){
+        this.typename = typename;
+    }
+
+    @Override
+    public String toString() {
+        // returns a typename as string
+        return typename;
+    }
+}
+
 }

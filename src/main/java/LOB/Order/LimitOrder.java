@@ -1,9 +1,10 @@
-package LOB;
+package LOB.Order;
 
+import LOB.OrderEnum;
 import LOB.Interfaces.HasPrice;
 
 public class LimitOrder extends Order implements HasPrice, Comparable<HasPrice> {
-    double price;
+    public double price;
 
     public LimitOrder(double price, double amount, OrderEnum.Side side){
         super(amount, side);

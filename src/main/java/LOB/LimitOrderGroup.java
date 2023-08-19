@@ -1,6 +1,9 @@
 package LOB;
 
 import LOB.Interfaces.HasPrice;
+import LOB.Order.LimitOrder;
+import LOB.Order.MarketOrder;
+import LOB.Order.Order;
 
 import java.util.Deque;
 import java.util.Iterator;
@@ -139,10 +142,13 @@ public class LimitOrderGroup implements HasPrice, Comparable<HasPrice> {
         return og != null ? og.toString() : String.format(_toFormat, "None", 0., 0., 0);
     }
 
+    /*
+     * get list of orders that were removed via market order.
+     * Also clears the list once called.
+     */
     public ArrayList<Long> getRemoved(){
         ArrayList<Long> toReturn = new ArrayList<Long>(_removed);
         _removed.clear();
         return toReturn;
     }
 }
-
