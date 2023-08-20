@@ -3,6 +3,8 @@ package Agents;
 import java.util.HashMap;
 import LOB.LimitOrderBook;
 import LOB.Interfaces.HasID;
+import LOB.Order.LimitOrder;
+import LOB.Order.MarketOrder;
 import LOB.Order.Order;
 import LOB.OrderEnum.OrderCompletedMsg;
 
@@ -16,6 +18,15 @@ public abstract class Agent implements HasID {
         this.LOB = LOB;
         setID(LOB.registerAgent(this));
         this.liveOrders = new HashMap<Long, Order>();
+    }
+
+    public void sendOrder(LimitOrder order){
+        long orderID = LOB.receiveLimitOrder(order, this.id);
+        liveOrders.put(orderID, order);
+    }
+
+    public void sendOrder(MarketOrder order){
+        LOB.receiveMarketOrder(order, this.id);
     }
 
     public long getID(){

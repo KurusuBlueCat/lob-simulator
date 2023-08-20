@@ -202,6 +202,10 @@ public class LimitOrderBook {
         if (group == null) return false;
 
         boolean result = group.cancelOrder(id);
+
+        long orderOwnerID = orderAgentMap.get(id);
+        idAgentMap.get(orderOwnerID).completeOrder(id, OrderCompletedMsg.CANCELLED);
+
         if (group.countOrder() == 0) {
             if (isAsk) asks.remove(group); else bids.remove(group);
         }

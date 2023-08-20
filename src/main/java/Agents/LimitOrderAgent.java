@@ -1,6 +1,7 @@
 package Agents;
 
 import java.util.Random;
+import java.util.HashSet;
 
 import LOB.LimitOrderBook;
 import LOB.Order.LimitOrder;
@@ -48,12 +49,14 @@ public class LimitOrderAgent extends Agent {
 
         LimitOrder newOrder = new LimitOrder(orderPrice, _amount, side);
 
-        liveOrders.put(LOB.receiveLimitOrder(newOrder, this.id), newOrder);
+        sendOrder(newOrder);
 
-        for (Long toRemove : liveOrders.keySet()){
-            if (_rng.nextDouble() < _cancelRate)
+        HashSet<Long> toIterate = new HashSet<Long>(liveOrders.keySet());
+
+        for (Long toRemove : toIterate){
+            if (_rng.nextDouble() < _cancelRate){
                 LOB.cancelOrder(toRemove);
-                liveOrders.remove(toRemove);
+            }
         }
     }
 
