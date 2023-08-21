@@ -121,4 +121,58 @@ public class MarketOrderMatchingTests {
         Assert.assertEquals(LOB.asks.first().countOrder(), 1);
         Assert.assertEquals(LOB.asks.first().aggregateOrderAmount(), 10.0);
     }
+
+    @Test
+    public void timePriorityAskTest(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 50.0, 50.0, 50.0, 50.0};
+        long[] orderIDs = new long[5];
+
+        for (int i=0; i<5; ++i){
+            double price = randomOrder[i];
+            long id = LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.ASK));
+            orderIDs[i] = id;
+        }
+
+        LOB.receiveMarketOrder(new MarketOrder(30, OrderEnum.Side.BID));
+
+        //This checks if the remaining order ids are orderIDs[3] and orderIDs[4]
+        for (int i=3; i<5; ++i){
+            Assert.assertEquals(LOB.getAsks().first().ordersDeque.peek().id, 
+                                orderIDs[i]);
+            //match the above order and remove from the LOB
+            LOB.receiveMarketOrder(new MarketOrder(10, OrderEnum.Side.BID));
+        }
+
+        //There should be no other orders
+        Assert.assertEquals(LOB.getAsks().size(), 0);
+    }
+
+    @Test
+    public void timePriorityBidTest(){
+        LimitOrderBook LOB = new LimitOrderBook();
+
+        Double[] randomOrder = {50.0, 50.0, 50.0, 50.0, 50.0};
+        long[] orderIDs = new long[5];
+
+        for (int i=0; i<5; ++i){
+            double price = randomOrder[i];
+            long id = LOB.receiveLimitOrder(new LimitOrder(price, 10., OrderEnum.Side.BID));
+            orderIDs[i] = id;
+        }
+
+        LOB.receiveMarketOrder(new MarketOrder(30, OrderEnum.Side.ASK));
+
+        //This checks if the remaining order ids are orderIDs[3] and orderIDs[4]
+        for (int i=3; i<5; ++i){
+            Assert.assertEquals(LOB.getBids().first().ordersDeque.peek().id, 
+                                orderIDs[i]);
+            //match the above order and remove from the LOB
+            LOB.receiveMarketOrder(new MarketOrder(10, OrderEnum.Side.ASK));
+        }
+
+        //There should be no other orders
+        Assert.assertEquals(LOB.getBids().size(), 0);
+    }
 }
