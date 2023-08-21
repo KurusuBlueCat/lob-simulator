@@ -56,15 +56,20 @@ public class LimitOrderAgentTests {
         Assert.assertEquals(a.liveOrders.size(), 2);
         Assert.assertEquals(LOB.getBids().size(), 1);
         Assert.assertEquals(LOB.getAsks().size(), 1);
+        Assert.assertEquals(LOB.getBids().first().ordersDeque.peek().id, orderID);
+        Assert.assertEquals(LOB.getAsks().first().ordersDeque.peek().id, orderID2);
 
         //This evaluates to true if cancel successful
         Assert.assertTrue(a.cancelOrder(orderID));
 
+        //check if the correct order was removed
         Assert.assertTrue(!a.liveOrders.containsKey(orderID));
         Assert.assertTrue(a.liveOrders.containsKey(orderID2));
         Assert.assertEquals(a.liveOrders.size(), 1);
         Assert.assertEquals(LOB.getBids().size(), 0);
         Assert.assertEquals(LOB.getAsks().size(), 1);
+        Assert.assertEquals(LOB.getBids().size(), 0);
+        Assert.assertEquals(LOB.getAsks().first().ordersDeque.peek().id, orderID2);
 
         //canceling should fail
         Assert.assertTrue(!a.cancelOrder(orderID));
