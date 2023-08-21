@@ -41,5 +41,33 @@ public class LimitOrderAgentTests {
         Assert.assertEquals(LOB.getBids().size(), 2);
         Assert.assertEquals(LOB.getBestBid(), 1009.700);
     }
+
+    @Test
+    public void cancelOrderTest() {
+        LimitOrderBook LOB = new LimitOrderBook();
+        Agent a = new LimitOrderAgent(LOB);
+
+        long orderID = a.sendOrder(new LimitOrder(990, 5., OrderEnum.Side.BID));
+        long orderID2 = a.sendOrder(new LimitOrder(1000, 5., OrderEnum.Side.ASK));
+
+        //Expected Initial State
+        Assert.assertTrue(a.liveOrders.containsKey(orderID));
+        Assert.assertTrue(a.liveOrders.containsKey(orderID2));
+        Assert.assertEquals(a.liveOrders.size(), 2);
+        Assert.assertEquals(LOB.getBids().size(), 1);
+        Assert.assertEquals(LOB.getAsks().size(), 1);
+
+        //This evaluates to true if cancel successful
+        Assert.assertTrue(a.cancelOrder(orderID));
+
+        Assert.assertTrue(!a.liveOrders.containsKey(orderID));
+        Assert.assertTrue(a.liveOrders.containsKey(orderID2));
+        Assert.assertEquals(a.liveOrders.size(), 1);
+        Assert.assertEquals(LOB.getBids().size(), 0);
+        Assert.assertEquals(LOB.getAsks().size(), 1);
+
+        //canceling should fail
+        Assert.assertTrue(!a.cancelOrder(orderID));
+    }
     
 }

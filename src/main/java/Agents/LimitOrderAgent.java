@@ -55,11 +55,12 @@ public class LimitOrderAgent extends Agent {
 
         for (Long toRemove : toIterate){
             if (_rng.nextDouble() < _cancelRate){
-                LOB.cancelOrder(toRemove);
+                cancelOrder(toRemove);
             }
         }
     }
 
+    //TODO: make this an interface?
     public void completeOrder(long id, OrderCompletedMsg msg){
         switch (msg) {
             case FILLED:

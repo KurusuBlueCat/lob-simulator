@@ -20,13 +20,22 @@ public abstract class Agent implements HasID {
         this.liveOrders = new HashMap<Long, Order>();
     }
 
-    public void sendOrder(LimitOrder order){
+    public long sendOrder(LimitOrder order){
         long orderID = LOB.receiveLimitOrder(order, this.id);
         liveOrders.put(orderID, order);
+        return orderID;
     }
 
-    public void sendOrder(MarketOrder order){
-        LOB.receiveMarketOrder(order, this.id);
+    public long sendOrder(MarketOrder order){
+        return LOB.receiveMarketOrder(order, this.id);
+    }
+
+    public boolean cancelOrder(long orderID){
+        if (liveOrders.containsKey(orderID)){
+            return LOB.cancelOrder(orderID);
+        } else {
+            return false;
+        }
     }
 
     public long getID(){

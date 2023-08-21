@@ -195,7 +195,8 @@ public class LimitOrderBook {
         if (!idOrderMap.containsKey(id)) return false;
 
         LimitOrderGroup priceLevel = new LimitOrderGroup(idOrderMap.get(id).price, null);
-        boolean isAsk = priceLevel.price >= getBestBid();
+        //no crossed market assumption
+        boolean isAsk = priceLevel.price > getBestBid();
         LimitOrderGroup group = isAsk ? asks.ceiling(priceLevel)
                                       : bids.floor(priceLevel);
 
