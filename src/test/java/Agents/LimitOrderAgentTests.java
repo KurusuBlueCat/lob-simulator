@@ -25,21 +25,21 @@ public class LimitOrderAgentTests {
         Assert.assertEquals(LOB.getBestBid(), 990);
     }
 
-    // @Test
-    // public void matchOrderTest() {
+    @Test
+    public void randomLimitOrderTest() {
 
-    //     LimitOrderBook LOB = new LimitOrderBook();
-    //     Agent a = new LimitOrderAgent(LOB);
+        LimitOrderBook LOB = new LimitOrderBook();
+        Agent a = new LimitOrderAgent(LOB);
 
-    //     a.submitOrder(new LimitOrder(990, 5., OrderEnum.Side.BID));
-    //     a.submitOrder(new LimitOrder(1010, 5., OrderEnum.Side.ASK));        
+        a.sendOrder(new LimitOrder(990, 5., OrderEnum.Side.BID));
+        a.sendOrder(new LimitOrder(1010, 5., OrderEnum.Side.ASK));
 
-    //     a.submitOrder();
+        a.act();
 
-    //     //With seed = 0 (by default), the agent will place a Bid order at 1009.7
-    //     Assert.assertEquals(LOB.getAsks().size(), 1);
-    //     Assert.assertEquals(LOB.getBids().size(), 2);
-    //     Assert.assertEquals(LOB.getBestBid(), 1009.700);
-    // }
+        //With seed = 0 (by default), the agent will place a Bid order at 1009.7
+        Assert.assertEquals(LOB.getAsks().size(), 1);
+        Assert.assertEquals(LOB.getBids().size(), 2);
+        Assert.assertEquals(LOB.getBestBid(), 1009.700);
+    }
     
 }
