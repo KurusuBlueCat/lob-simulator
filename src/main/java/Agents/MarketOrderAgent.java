@@ -34,8 +34,7 @@ public class MarketOrderAgent extends Agent {
             newOrder = new MarketOrder(_amount, Side.BID);
         }
 
-        long orderId = LOB.receiveMarketOrder(newOrder, this.id);
-        this.liveOrders.put(orderId, newOrder);
+        sendOrder(newOrder);
     }
 
     public void completeOrder(long id, OrderCompletedMsg msg){
